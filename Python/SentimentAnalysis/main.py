@@ -1,16 +1,11 @@
 from src.audio_capture import AudioCapture
 from src.speech_to_text import SpeechToText
 from src.sentiment_analysis import SentimentAnalysis
-from vosk import Model, KaldiRecognizer
-import pyaudio
 
 def main():
-    model_path = "/Users/mattia/Documents/Progetti/Sentiment Analysis Project/Python/SentimentAnalysis/models/vosk-model-it-0.22"
     audio = AudioCapture()
-    speech = SpeechToText(model_path)
+    speech = SpeechToText()
     sentiment = SentimentAnalysis()
-
-    
 
     print("Adapting to environmental noises, wait...")
     audio.adjust_noise()

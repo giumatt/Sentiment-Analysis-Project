@@ -20,10 +20,13 @@ Per testare se il tutto funziona basta aprire un terminale qualsiasi e digitare:
 - `java --version`: dovrebbe venire stampata a schermo la versione di Java correntemente installata;
 - `mvn -v`: dovrebbe venire stampata a schermo la versione di Maven correntemente installata.
 
-In seguito bisogna aprire un terminale dentro la cartella: `<percorso-precedente>\Sentiment Analysis Project\Java\sa-java` e digitare:
+In seguito bisogna aprire un terminale dentro la cartella: `<percorso-precedente>\Sentiment Analysis Project\Java\SA-Java` e digitare:
 ```
 mvn install
 ```
-Infine sarà possibile importare le dovute librerie e soprattutto eseguire il progetto.
+Come ultima cosa va scaricato il modello di [Vosk](https://alphacephei.com/vosk/), da [qui](https://alphacephei.com/vosk/models/vosk-model-it-0.22.zip) (modello Italiano)
+e, nel file `Main.java` va cambiato il percorso in base a dove l'avete scaricato ed estratto.
 
-Per qualsiasi problema non esitate a contattarmi, sono sempre disponibile! 😁
+Infine sarà possibile importare le dovute librerie ed eseguire il progetto.
+
+Per qualsiasi problema non esitate a contattarmi! 😁

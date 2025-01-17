@@ -41,7 +41,7 @@ Dopo aver clonato il repository, usando un terminale bisogna andare nella cartel
 python3 -m venv .
 ```
 
-Terminata la creazione del virtual environment bisogna eseguito il comando per attivarlo (va fatto ogni volta, la prima volta che si esegue il programma):
+Terminata la creazione del virtual environment bisogna eseguire il comando per attivarlo (va fatto ogni volta, la prima volta che si esegue il programma):
 
 Su Windows:
 ```

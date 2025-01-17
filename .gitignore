@@ -2,6 +2,7 @@
 Python/bin
 Python/include
 Python/lib
+Python/lib64
 Python/pyvenv.cfg
 Python/SentimentAnalysis/model
 Python/SentimentAnalysis/src/__pycache__

@@ -3,3 +3,5 @@ Python/bin
 Python/include
 Python/lib
 Python/pyvenv.cfg
+Python/SentimentAnalysis/models
+Python/SentimentAnalysis/src/__pycache__

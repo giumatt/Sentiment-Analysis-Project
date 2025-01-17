@@ -30,3 +30,36 @@ e, nel file `Main.java` va cambiato il percorso in base a dove l'avete scaricato
 Infine sarà possibile importare le dovute librerie ed eseguire il progetto.
 
 Per qualsiasi problema non esitate a contattarmi! 😁
+
+## Versione Python
+
+Questa versione è molto più semplice da utilizzare.
+
+Dopo aver clonato il repository, usando un terminale bisogna andare nella cartella `Python` e digitare il comando:
+
+```
+python3 -m venv .
+```
+
+Terminata la creazione del virtual environment bisogna eseguito il comando per attivarlo (va fatto ogni volta, la prima volta che si esegue il programma):
+
+Su Windows:
+```
+C:\> <venv>\Scripts\activate.bat
+```
+
+Su Linux/MacOS:
+```
+source bin/activate
+```
+
+Una volta attivato il virtual environment va eseguito il comando:
+```
+pip install -r requirements.txt
+```
+
+Dopodiché sarà possibile eseguire il programma.
+
+---
+
+#### N. B. Al momento (17/01/2025) entrambe le versioni non sono testate

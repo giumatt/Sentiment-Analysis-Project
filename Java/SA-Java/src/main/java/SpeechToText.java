@@ -7,7 +7,15 @@ public class SpeechToText {
 
     public SpeechToText(String modelPath) throws IOException {
         Model model = new Model(modelPath);
-        recognizer = new Recognizer(model, 16000);
+        recognizer = new Recognizer(model, 16000.0f);
+    }
+
+    public void writeResult(byte[] buffer) {
+        if (recognizer.acceptWaveForm(buffer, buffer.length)) {
+            System.out.println("Risultato: " + recognizer.getResult());
+        } else {
+            System.out.println("Parziale: " + recognizer.getPartialResult());
+        }
     }
 
     public String processAudio(byte[] audioBuffer) {

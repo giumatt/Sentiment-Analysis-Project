@@ -12,11 +12,14 @@ public class AudioCapture {
 
     public void start() { microphone.start(); }
 
-    public byte[] captureAudio() {
-        byte[] buffer = new byte[4096];
-        microphone.read(buffer, 0, buffer.length);
-        return buffer;
+    public int read(byte[] buffer) {
+        return microphone.read(buffer, 0, buffer.length);
     }
+
+//    public int captureAudio() {
+//        byte[] buffer = new byte[4096];
+//        return microphone.read(buffer, 0, buffer.length);
+//    }
 
     public void stop() { microphone.stop(); }
 }

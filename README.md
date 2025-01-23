@@ -63,3 +63,6 @@ Dopodiché sarà possibile eseguire il programma.
 ---
 
 #### N. B. Al momento (17/01/2025) entrambe le versioni non sono testate
+
+### Da fare:
+- Sistemare il sentiment di Java e Python. Per Python [link](https://huggingface.co/tabularisai/multilingual-sentiment-analysis) e per Java [link](https://stanfordnlp.github.io/CoreNLP/simple.html).

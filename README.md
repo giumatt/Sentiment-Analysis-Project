@@ -66,3 +66,4 @@ Dopodiché sarà possibile eseguire il programma.
 
 ### Da fare:
 - Sistemare il sentiment di Java e Python. Per Python [link](https://huggingface.co/tabularisai/multilingual-sentiment-analysis) e per Java [link](https://stanfordnlp.github.io/CoreNLP/simple.html).
+- Vedere per la dashboard (Node-RED(?)).

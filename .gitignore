@@ -1,8 +1,8 @@
 .DS_Store
-Python/bin
-Python/include
-Python/lib
-Python/lib64
-Python/pyvenv.cfg
+Python/SentimentAnalysis/bin
+Python/SentimentAnalysis/include
+Python/SentimentAnalysis/lib
+Python/SentimentAnalysis/lib64
+Python/SentimentAnalysis/pyvenv.cfg
 Python/SentimentAnalysis/model
 Python/SentimentAnalysis/src/__pycache__

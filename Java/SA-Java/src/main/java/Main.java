@@ -4,7 +4,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws LineUnavailableException, IOException {
         AudioCapture audio = new AudioCapture();
-        SpeechToText speech = new SpeechToText("/home/fra/git/Sentiment-Analysis-Project/vosk-model-it-0.22");
+        SpeechToText speech = new SpeechToText("/home/mattia/Downloads/vosk-model-it-0.22");
         TextSegmentation segmentation = new TextSegmentation();
         SentimentAnalysis sentiment = new SentimentAnalysis();
         DataStorage storage = new DataStorage();

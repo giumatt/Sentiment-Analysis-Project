@@ -1,4 +1,5 @@
 SpeechRecognition
 textblob
-vosk
 pyaudio
+transformers
+tensorflow

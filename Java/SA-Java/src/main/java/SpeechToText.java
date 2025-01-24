@@ -12,9 +12,9 @@ public class SpeechToText {
 
     public void writeResult(byte[] buffer) {
         if (recognizer.acceptWaveForm(buffer, buffer.length)) {
-            System.out.println("Risultato: " + recognizer.getResult());
+            System.out.println("Result: " + recognizer.getResult());
         } else {
-            System.out.println("Parziale: " + recognizer.getPartialResult());
+            System.out.println("Partial: " + recognizer.getPartialResult());
         }
     }
 

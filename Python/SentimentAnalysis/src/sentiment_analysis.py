@@ -1,14 +1,10 @@
-from textblob import TextBlob
+from transformers import pipeline
 
 class SentimentAnalysis:
-    @staticmethod
-    def analyze_sentiment(text):
-        blob = TextBlob(text)
-        polarity = blob.sentiment.polarity
+    def __init__(self):
+        self.sentiment_pipeline = pipeline("sentiment-analysis", model="tabularisai/multilingual-sentiment-analysis")
+    
+    def analyze_sentiment(self, text):
+        results = self.sentiment_pipeline(text)
 
-        if polarity > 0:
-            return "Positive feedback"
-        elif polarity < 0:
-            return "Negative feedback"
-        else:
-            return "Neutral feedback"
+        return results[0]['label']

@@ -14,3 +14,4 @@ Python/SentimentAnalysis/include
 Python/SentimentAnalysis/pyvenv.cfg
 Python/SentimentAnalysis/src/__pycache__
 Java/.idea/
+.vscode/

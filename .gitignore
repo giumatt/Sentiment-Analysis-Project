@@ -6,3 +6,11 @@ Python/lib64
 Python/pyvenv.cfg
 Python/model
 Python/src/__pycache__
+Python/SentimentAnalysis/lib64
+Python/SentimentAnalysis/bin
+Python/SentimentAnalysis/lib
+Python/SentimentAnalysis/model
+Python/SentimentAnalysis/include
+Python/SentimentAnalysis/pyvenv.cfg
+Python/SentimentAnalysis/src/__pycache__
+Java/.idea/

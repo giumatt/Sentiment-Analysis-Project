@@ -14,23 +14,25 @@ public class Main {
         System.out.println("Listening for audio...");
 
         byte[] buffer = new byte[4096];
+        
         while(true) {
             int bytesRead = audio.read(buffer);
-            if(bytesRead > 0) speech.writeResult(buffer);
-        }
+            
+            if(bytesRead > 0) {
+              String recognizedText = speech.processAudio(buffer);
 
-//        while (true) {
-//            if(byte[] audioBuffer = audio.captureAudio();)
-//            String text = speech.processAudio(audioBuffer);
-//
-//            if (text != null && !text.isEmpty()) {
-//                System.out.println("Recognized text: " + text);
-////                if (segmentation.isEndOfSentence(text)) {
-////                    String sentimentPartial = sentiment.analyzeSentiment(text);
-////                    storage.saveSentence(text, sentimentPartial);
-////                    System.out.println("Saved -> " + text + " : " + sentimentPartial);
-//                }
-//            }
-//        }
+              if(recognizedText != null && !recognizedText.isEmpty()) {
+                System.out.println("Recognized text: " + recognizedText);
+
+                if(segmentation.isEndOfSentence(recognizedText)) {
+                  String sentimentLabel = sentiment.analyzeSentiment(recognizedText);
+
+                  storage.saveSentence(recognizedText, sentimentLabel);
+
+                  System.out.println("Saved: " + recognizedText + "with sentiment: " + sentimentLabel);
+                }
+              }
+            }
+        }
     }
 }

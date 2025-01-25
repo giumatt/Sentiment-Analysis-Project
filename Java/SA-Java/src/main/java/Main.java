@@ -5,9 +5,15 @@ public class Main {
     public static void main(String[] args) throws LineUnavailableException, IOException {
         AudioCapture audio = new AudioCapture();
         SpeechToText speech = new SpeechToText("/home/mattia/Downloads/vosk-model-it-0.22");
-        TextSegmentation segmentation = new TextSegmentation();
+        //TextSegmentation segmentation = new TextSegmentation();
         SentimentAnalysis sentiment = new SentimentAnalysis();
         DataStorage storage = new DataStorage();
+
+        // Part for defining sentence length and pauses between sentences
+        StringBuilder phrase = new StringBuilder();
+        long lastSpeechTimestamp = System.currentTimeMillis();
+        final int pauseThreshold = 2000;
+        final int minWordsThreshold = 5;
 
         audio.start();
 
@@ -22,16 +28,33 @@ public class Main {
               String recognizedText = speech.processAudio(buffer);
 
               if(recognizedText != null && !recognizedText.isEmpty()) {
-                System.out.println("Recognized text: " + recognizedText);
+                lastSpeechTimestamp = System.currentTimeMillis();
 
-                if(segmentation.isEndOfSentence(recognizedText)) {
-                  String sentimentLabel = sentiment.analyzeSentiment(recognizedText);
+                phrase.append(recognizedText).append(" ");
 
-                  storage.saveSentence(recognizedText, sentimentLabel);
+                String[] words = phrase.toString().trim().split("\\s+");
 
-                  System.out.println("Saved: " + recognizedText + "with sentiment: " + sentimentLabel);
+                if(words.length > minWordsThreshold) {
+                  String sentimentLabel = sentiment.analyzeSentiment(phrase.toString().trim());
+
+                  storage.saveSentence(phrase.toString().trim(), sentimentLabel);
+
+                  System.out.println("Saved: " + phrase + "with sentiment: " + sentimentLabel);
+
+                  phrase.setLength(0);
                 }
               }
+
+              // Check if there's an extended pause
+              if (System.currentTimeMillis() - lastSpeechTimestamp > pauseThreshold && phrase.length() > 0) {
+                String sentimentLabel = sentiment.analyzeSentiment(phrase.toString().trim());
+
+                storage.saveSentence(phrase.toString().trim(), sentimentLabel);
+
+                System.out.println("Saved: " + phrase + "with sentiment: " + sentimentLabel);
+
+                phrase.setLength(0);
+              } 
             }
         }
     }

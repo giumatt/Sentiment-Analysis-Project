@@ -1,11 +1,16 @@
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.net.URI;
 
 public class Main {
     public static void main(String[] args) throws LineUnavailableException, IOException {
         AudioCapture audio = new AudioCapture();
         SpeechToText speech = new SpeechToText("/home/mattia/Downloads/vosk-model-it-0.22");
-        //TextSegmentation segmentation = new TextSegmentation();
         SentimentAnalysis sentiment = new SentimentAnalysis();
         DataStorage storage = new DataStorage();
 
@@ -56,6 +61,27 @@ public class Main {
                 phrase.setLength(0);
               } 
             }
+        }
+    }
+
+    private static void sendToNodeRed(String text, String sentiment) {
+        try {
+            URI uri = new URI("http://localhost:1800/sentiment");
+            URL url = uri.toURL();       // Node-RED endpoint
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            String jsonInputString = "{\"text\": \"" + text + "\", \"sentiment\": \"" + sentiment + "\"}";
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            conn.getResponseCode();
+        } catch (IOException e) { e.printStackTrace(); } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 }

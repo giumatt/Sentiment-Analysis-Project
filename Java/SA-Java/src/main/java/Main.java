@@ -8,23 +8,18 @@ import java.nio.charset.StandardCharsets;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.FileInputStream;
-import java.util.Properties;
 import java.util.Scanner;
 
 public class Main {
-
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
     private static final int PAUSE_THRESHOLD = 2000;
-    private static final int MIN_WORDS_THRESHOLD = 5;
+    private static final int MIN_WORDS_THRESHOLD = 3;
     private static String NODE_RED_URL;
 
     public static void main(String[] args) throws LineUnavailableException, IOException {
-        Properties properties = loadConfig("config.properties");
-
-        String modelPathIT = properties.getProperty("vosk.model.it");
-        String modelPathEN = properties.getProperty("vosk.model.en");
-        NODE_RED_URL = properties.getProperty("node_red_url");
+        String modelPathIT = ConfigLoader.getProperty("vosk.model.it");
+        String modelPathEN = ConfigLoader.getProperty("vosk.model.en");
+        NODE_RED_URL = ConfigLoader.getProperty("node_red_url");
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Select the language:");
@@ -42,7 +37,7 @@ public class Main {
 
         AudioCapture audio = new AudioCapture();
         SpeechToText speech = new SpeechToText(MODEL_PATH);
-        SentimentAnalysis sentiment = new SentimentAnalysis();
+        //SentimentAnalysis sentiment = new SentimentAnalysis();
 
         // Part for defining sentence length and pauses between sentences
         StringBuilder phrase = new StringBuilder();
@@ -67,21 +62,19 @@ public class Main {
 
                     String[] words = phrase.toString().trim().split("\\s+");
 
-                    if (words.length > MIN_WORDS_THRESHOLD) {
-                        String sentimentLabel = sentiment.analyzeSentiment(phrase.toString().trim());
+                    if (words.length >= MIN_WORDS_THRESHOLD) {
+                        String sentimentLabel = SentimentAnalysisOpenAI.analyzeSentimentOAI(phrase.toString().trim());
 
-                        //storage.saveSentence(phrase.toString().trim(), sentimentLabel);
                         sendToNodeRedAsync(phrase.toString().trim(), sentimentLabel, language);
 
-                        //System.out.println("Saved: " + phrase + "with sentiment: " + sentimentLabel);
                         LOGGER.info("Sent to Node-RED: " + phrase + " | Sentiment: " + sentimentLabel);
+
                         phrase.setLength(0);
                     }
                 }
-
                 // Check if there's an extended pause
                 if (System.currentTimeMillis() - lastSpeechTimestamp > PAUSE_THRESHOLD && !phrase.isEmpty()) {
-                    String sentimentLabel = sentiment.analyzeSentiment(phrase.toString().trim());
+                    String sentimentLabel = SentimentAnalysisOpenAI.analyzeSentimentOAI(phrase.toString().trim());
 
                     //storage.saveSentence(phrase.toString().trim(), sentimentLabel);
                     sendToNodeRedAsync(phrase.toString().trim(), sentimentLabel, language);
@@ -98,18 +91,6 @@ public class Main {
                 }
             }
         }
-    }
-
-    private static Properties loadConfig(String path) {
-        Properties properties = new Properties();
-
-        try (FileInputStream fis = new FileInputStream(path)) {
-            properties.load(fis);
-        } catch (IOException e) {
-            System.err.println("Error while loading configuration: " + e);
-        }
-
-        return properties;
     }
 
     private static void sendToNodeRed(String text, String sentiment, String language) {

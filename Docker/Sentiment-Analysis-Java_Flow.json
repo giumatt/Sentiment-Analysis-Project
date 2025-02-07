@@ -1,0 +1,148 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "8e7e3d05f2ab62c5",
+        "type": "http in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Receive Sentiment Data",
+        "url": "/sentiment",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 100,
+        "wires": [
+            [
+                "33776796627a21c0",
+                "30f7d6436e043a85"
+            ]
+        ]
+    },
+    {
+        "id": "0db5d73d4927a369",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Translating function",
+        "func": "if (typeof msg.payload === \"string\") {\n    try {\n        msg.payload = JSON.parse(msg.payload);\n    } catch (e) {\n        node.error(\"Errore nel parsing JSON: \" + e.message);\n        return null;\n    }\n}\n\nif (!msg.payload || !msg.payload.text || !msg.payload.sentiment || !msg.payload.language) {\n    node.warn(\"Dati mancanti nel payload dopo conversione: \" + JSON.stringify(msg.payload));\n    return null;\n}\n\nmsg.payload = [\n    {\n        measurement: \"sentiment_data\",\n        fields: { \n            text: msg.payload.text,\n            sentiment: msg.payload.sentiment,\n            language: msg.payload.language\n        }\n    }\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 220,
+        "wires": [
+            [
+                "120ca2f6fbd9553b",
+                "664b3b1181869407"
+            ]
+        ]
+    },
+    {
+        "id": "33776796627a21c0",
+        "type": "json",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 250,
+        "y": 220,
+        "wires": [
+            [
+                "0db5d73d4927a369",
+                "45578b08949c667b"
+            ]
+        ]
+    },
+    {
+        "id": "45578b08949c667b",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "JSON Output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 410,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "120ca2f6fbd9553b",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Database input",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "30f7d6436e043a85",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Data coming from Java app",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "664b3b1181869407",
+        "type": "influxdb batch",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "bb39010590bc1e92",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "influxDb",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "Sentiment-Analysis-Project",
+        "bucket": "sentimentBucket",
+        "x": 620,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "bb39010590bc1e92",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "influxDB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://influxdb:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    }
+]

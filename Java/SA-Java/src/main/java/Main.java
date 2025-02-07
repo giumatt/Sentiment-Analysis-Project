@@ -37,7 +37,7 @@ public class Main {
 
         AudioCapture audio = new AudioCapture();
         SpeechToText speech = new SpeechToText(MODEL_PATH);
-        //SentimentAnalysis sentiment = new SentimentAnalysis();
+        SentimentAnalysis sentiment = new SentimentAnalysis();
 
         // Part for defining sentence length and pauses between sentences
         StringBuilder phrase = new StringBuilder();
@@ -63,7 +63,7 @@ public class Main {
                     String[] words = phrase.toString().trim().split("\\s+");
 
                     if (words.length >= MIN_WORDS_THRESHOLD) {
-                        String sentimentLabel = SentimentAnalysisOpenAI.analyzeSentimentOAI(phrase.toString().trim());
+                        String sentimentLabel = sentiment.analyzeSentiment(phrase.toString().trim());
 
                         sendToNodeRedAsync(phrase.toString().trim(), sentimentLabel, language);
 
@@ -74,7 +74,7 @@ public class Main {
                 }
                 // Check if there's an extended pause
                 if (System.currentTimeMillis() - lastSpeechTimestamp > PAUSE_THRESHOLD && !phrase.isEmpty()) {
-                    String sentimentLabel = SentimentAnalysisOpenAI.analyzeSentimentOAI(phrase.toString().trim());
+                    String sentimentLabel = sentiment.analyzeSentiment(phrase.toString().trim());
 
                     //storage.saveSentence(phrase.toString().trim(), sentimentLabel);
                     sendToNodeRedAsync(phrase.toString().trim(), sentimentLabel, language);

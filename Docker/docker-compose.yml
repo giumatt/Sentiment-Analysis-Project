@@ -1,0 +1,59 @@
+services:
+  node-red:
+    image: nodered/node-red:latest
+    container_name: node-red
+    restart: unless-stopped
+    ports:
+      - "1880:1880"
+    networks:
+      - monitoring-net
+    volumes:
+      - node-red-data:/data
+      - node-red-config:/usr/src/node-red
+      #entrypoint: ["/bin/bash", "-c", "npm install --no-fund --no-audit node-red-contrib-influxdb && exec node-red"]
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    networks:
+      - monitoring-net
+    volumes:
+      - type: volume
+        source: influxdb-storage
+        target: /var/lib/influxdb
+      - type: volume 
+        source: influxdb-config
+        target: /etc/influxdb
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=password
+      - DOCKER_INFLUXDB_INIT_ORG=Sentiment-Analysis-Project
+      - DOCKER_INFLUXDB_INIT_BUCKET=sentimentBucket
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=gNAXrZseFwYCKf7wiDAWW53z4vgEdirVsRjh5gFG4Yvu7JiM5IAD5WhJmltg8Q9tiy4XDKTKMjPRRhrmmpbA6Q==
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring-net
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=grafanapassword
+
+networks:
+  monitoring-net:
+
+volumes:
+  node-red-data:
+  node-red-config:
+  influxdb-storage:
+  influxdb-config:
+  grafana-storage:

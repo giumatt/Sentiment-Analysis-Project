@@ -22,13 +22,26 @@ public class Main {
         NODE_RED_URL = ConfigLoader.getProperty("node_red_url");
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Select the language:");
-        System.out.println("1 - Italian");
-        System.out.println("2 - English");
-        System.out.println("Choice: ");
+        int choice = 0;
 
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        while (choice != 1 && choice != 2) {
+            System.out.println("Select the language:");
+            System.out.println("1 - Italian");
+            System.out.println("2 - English");
+            System.out.println("Choice: ");
+
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+
+                if (choice != 1 && choice != 2) {
+                    System.out.println("Invalid choice. Please select either 1 or 2.\n");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a number (1 or 2).\n");
+                scanner.nextLine();
+            }
+        }
 
         String language = (choice == 1) ? "Italian" : "English";
         String MODEL_PATH = language.equals("Italian") ? modelPathIT : modelPathEN;
@@ -37,9 +50,8 @@ public class Main {
 
         AudioCapture audio = new AudioCapture();
         SpeechToText speech = new SpeechToText(MODEL_PATH);
-        SentimentAnalysis sentiment = new SentimentAnalysis();
+        SentimentAnalysis sentiment = (language.equals("Italian")) ? new ItalianSentimentAnalysis() : new SentimentAnalysis();
 
-        // Part for defining sentence length and pauses between sentences
         StringBuilder phrase = new StringBuilder();
         long lastSpeechTimestamp = System.currentTimeMillis();
 
@@ -48,10 +60,10 @@ public class Main {
         LOGGER.info("Listening for audio...");
 
         byte[] buffer = new byte[4096];
-        
+
         while(true) {
             int bytesRead = audio.read(buffer);
-            
+
             if(bytesRead > 0) {
                 String recognizedText = speech.processAudio(buffer);
 

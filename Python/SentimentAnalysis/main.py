@@ -14,7 +14,9 @@ def main():
     while True:
         try:
             audio_data = audio.capture_audio()
-            text = speech.audio_to_text(audio_data)
+
+            if audio_data:
+                text = speech.audio_to_text(audio_data)
 
             if text:
                 print(f"Captured text: {text}")

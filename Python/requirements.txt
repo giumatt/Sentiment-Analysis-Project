@@ -2,4 +2,3 @@ SpeechRecognition
 textblob
 pyaudio
 transformers
-tensorflow

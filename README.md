@@ -25,7 +25,7 @@ In seguito bisogna aprire un terminale dentro la cartella: `<percorso-precedente
 mvn install
 ```
 Come ultima cosa va scaricato il modello di [Vosk](https://alphacephei.com/vosk/), da [qui](https://alphacephei.com/vosk/models/vosk-model-it-0.22.zip) (modello Italiano)
-e, nel file `Main.java` va cambiato il percorso in base a dove l'avete scaricato ed estratto.
+e, nel file `SentimentAnalysis.Services.SentimentAnalysis.Main.Main.java` va cambiato il percorso in base a dove l'avete scaricato ed estratto.
 
 Infine sarà possibile importare le dovute librerie ed eseguire il progetto.
 

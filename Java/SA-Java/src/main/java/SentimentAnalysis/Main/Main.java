@@ -1,11 +1,14 @@
+package SentimentAnalysis.Main;
+
+import SentimentAnalysis.Config.ConfigLoader;
+import SentimentAnalysis.Services.AudioCapture;
+import SentimentAnalysis.Services.MQTTClient;
+import SentimentAnalysis.Services.SpeechToText;
+import SentimentAnalysis.Services.SentimentAnalysis;
+import org.eclipse.paho.client.mqttv3.MqttException;
+
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Scanner;
@@ -14,12 +17,16 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
     private static final int PAUSE_THRESHOLD = 2000;
     private static final int MIN_WORDS_THRESHOLD = 3;
-    private static String NODE_RED_URL;
+    private static MQTTClient mqttClient;
 
-    public static void main(String[] args) throws LineUnavailableException, IOException {
+    public static void main(String[] args) throws LineUnavailableException, IOException, MqttException {
         String modelPathIT = ConfigLoader.getProperty("vosk.model.it");
         String modelPathEN = ConfigLoader.getProperty("vosk.model.en");
-        NODE_RED_URL = ConfigLoader.getProperty("node_red_url");
+        String broker = ConfigLoader.getProperty("mqtt.broker");
+        String clientId = ConfigLoader.getProperty("mqtt.clientId");
+        String topic = ConfigLoader.getProperty("mqtt.topic");
+
+        mqttClient = new MQTTClient(broker, clientId, topic);
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Select the language:");
@@ -65,7 +72,7 @@ public class Main {
                     if (words.length >= MIN_WORDS_THRESHOLD) {
                         String sentimentLabel = sentiment.analyzeSentiment(phrase.toString().trim());
 
-                        sendToNodeRedAsync(phrase.toString().trim(), sentimentLabel, language);
+                        sendToNodeRed(recognizedText, sentimentLabel, language);
 
                         LOGGER.info("Sent to Node-RED: " + phrase + " | Sentiment: " + sentimentLabel);
 
@@ -76,9 +83,8 @@ public class Main {
                 if (System.currentTimeMillis() - lastSpeechTimestamp > PAUSE_THRESHOLD && !phrase.isEmpty()) {
                     String sentimentLabel = sentiment.analyzeSentiment(phrase.toString().trim());
 
-                    //storage.saveSentence(phrase.toString().trim(), sentimentLabel);
-                    sendToNodeRedAsync(phrase.toString().trim(), sentimentLabel, language);
-                    //System.out.println("Saved: " + phrase + "with sentiment: " + sentimentLabel);
+                    sendToNodeRed(recognizedText, sentimentLabel, language);
+
                     LOGGER.info("Sent to Node-RED: " + phrase + " | Sentiment: " + sentimentLabel);
                     phrase.setLength(0);
                 }
@@ -94,35 +100,13 @@ public class Main {
     }
 
     private static void sendToNodeRed(String text, String sentiment, String language) {
-        HttpURLConnection conn = null;
         try {
-            URI uri = new URI(NODE_RED_URL);
-            URL url = uri.toURL();       // Node-RED endpoint
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-
-            String jsonInputString = "{\"text\": \"" + text + "\", \"sentiment\": \"" + sentiment + "\", \"language\": \"" + language + "\"}";
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                LOGGER.severe("Error during Node-RED request. Response code: " + responseCode);
-            }
-        } catch (IOException | URISyntaxException e) {
-            LOGGER.log(Level.SEVERE, "Exception: ", e);
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
+            String jsonPayload = String.format("{\"text\": \"%s\", \"sentiment\": \"%s\", \"language\": \"%s\"}",
+                    text, sentiment, language);
+            mqttClient.publish(jsonPayload);
+            LOGGER.info("Sent to MQTT: " + jsonPayload);
+        } catch ( MqttException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-    }
-
-    private static void sendToNodeRedAsync(String text, String sentiment, String language) {
-        new Thread(() -> sendToNodeRed(text, sentiment, language)).start();
     }
 }

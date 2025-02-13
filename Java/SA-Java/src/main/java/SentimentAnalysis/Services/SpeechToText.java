@@ -1,8 +1,11 @@
+package SentimentAnalysis.Services;
+
+import SentimentAnalysis.Interfaces.SpeechToTextInterface;
 import org.vosk.*;
 import java.io.IOException;
 import org.json.JSONObject;
 
-public class SpeechToText {
+public class SpeechToText implements SpeechToTextInterface {
     private final Recognizer recognizer;
 
     public SpeechToText(String modelPath) throws IOException {

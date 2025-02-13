@@ -1,6 +1,10 @@
+package SentimentAnalysis.Services;
+
+import SentimentAnalysis.Interfaces.AudioCaptureInterface;
+
 import javax.sound.sampled.*;
 
-public class AudioCapture {
+public class AudioCapture implements AudioCaptureInterface {
     private TargetDataLine microphone;
 
     public AudioCapture() throws LineUnavailableException {

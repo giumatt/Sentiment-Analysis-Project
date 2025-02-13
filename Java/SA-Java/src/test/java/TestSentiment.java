@@ -1,3 +1,5 @@
+import SentimentAnalysis.Services.SentimentAnalysis;
+
 public class TestSentiment {
     public static void main(String[] args) {
         SentimentAnalysis sentimentAnalysis = new SentimentAnalysis();

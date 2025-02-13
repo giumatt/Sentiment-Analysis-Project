@@ -1,3 +1,6 @@
+import SentimentAnalysis.Services.AudioCapture;
+import SentimentAnalysis.Services.SpeechToText;
+
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
 

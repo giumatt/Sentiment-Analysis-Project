@@ -1,6 +1,6 @@
 import speech_recognition as sr
 
-class AudioCapture:
+class SentimentAnalysis.Services.SentimentAnalysis.Services.AudioCapture:
     def __init__(self):
         self.recognizer = sr.Recognizer()
         self.microphone = sr.Microphone()

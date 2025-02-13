@@ -1,8 +1,10 @@
-import edu.stanford.nlp.pipeline.*;
+package SentimentAnalysis.Services;
 
+import SentimentAnalysis.Interfaces.SentimentAnalysisInterface;
+import edu.stanford.nlp.pipeline.*;
 import java.util.Properties;
 
-public class SentimentAnalysis {
+public class SentimentAnalysis implements SentimentAnalysisInterface {
     private final StanfordCoreNLP pipeline;
 
     public SentimentAnalysis() {

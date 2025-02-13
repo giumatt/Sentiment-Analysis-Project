@@ -1,6 +1,6 @@
 import speech_recognition as sr
 
-class SpeechToText:
+class SentimentAnalysis.Services.SpeechToText:
     def __init__(self):
         self.recognizer = sr.Recognizer()
     

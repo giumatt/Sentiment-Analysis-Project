@@ -1,11 +1,11 @@
-from src.audio_capture import AudioCapture
-from src.speech_to_text import SpeechToText
-from src.sentiment_analysis import SentimentAnalysis
+from src.audio_capture import SentimentAnalysis.Services.SentimentAnalysis.Services.AudioCapture
+from src.speech_to_text import SentimentAnalysis.Services.SpeechToText
+from src.sentiment_analysis import SentimentAnalysis.Services.SentimentAnalysis
 
 def main():
-    audio = AudioCapture()
-    speech = SpeechToText()
-    sentiment = SentimentAnalysis()
+    audio = SentimentAnalysis.Services.SentimentAnalysis.Services.AudioCapture()
+    speech = SentimentAnalysis.Services.SpeechToText()
+    sentiment = SentimentAnalysis.Services.SentimentAnalysis()
 
     print("Adapting to environmental noises, wait...")
     audio.adjust_noise()

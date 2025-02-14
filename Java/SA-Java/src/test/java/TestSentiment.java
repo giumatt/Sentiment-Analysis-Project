@@ -2,15 +2,15 @@ import SentimentAnalysis.Services.SentimentAnalysis;
 
 public class TestSentiment {
     public static void main(String[] args) {
-        SentimentAnalysis sentimentAnalysis = new SentimentAnalysis();
+        SentimentAnalysis sentimentAnalysis = new SentimentAnalysis(true);
 
         String[] testSentences = {
-                "I love this museum!",
-                "This museum is awesome!",
-                "I don't really like this place.",
-                "The visit was very pleasant.",
-                "The exhibition is disappointing.",
-                "I don't like nor dislike this exhibition."
+                "Amo questo museo!",
+                "Questo museo è fantastico!",
+                "Questo posto non mi piace molto.",
+                "La visita è veramente piacevole.",
+                "Questa mostra è insoddisfacente.",
+                "Non so se mi piace."
         };
 
         for (String sentence : testSentences) {

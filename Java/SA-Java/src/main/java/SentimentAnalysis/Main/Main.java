@@ -22,13 +22,14 @@ public class Main {
     public static void main(String[] args) throws LineUnavailableException, IOException, MqttException {
         String modelPathIT = ConfigLoader.getProperty("vosk.model.it");
         String modelPathEN = ConfigLoader.getProperty("vosk.model.en");
+
         String broker = ConfigLoader.getProperty("mqtt.broker");
         String clientId = ConfigLoader.getProperty("mqtt.clientId");
         String topic = ConfigLoader.getProperty("mqtt.topic");
-
         mqttClient = new MQTTClient(broker, clientId, topic);
 
         Scanner scanner = new Scanner(System.in);
+
         System.out.println("Select the language:");
         System.out.println("1 - Italian");
         System.out.println("2 - English");
@@ -44,7 +45,9 @@ public class Main {
 
         AudioCapture audio = new AudioCapture();
         SpeechToText speech = new SpeechToText(MODEL_PATH);
-        SentimentAnalysis sentiment = new SentimentAnalysis();
+
+        boolean useAPI = language.equals("Italian");
+        SentimentAnalysis sentiment = new SentimentAnalysis(useAPI);
 
         // Part for defining sentence length and pauses between sentences
         StringBuilder phrase = new StringBuilder();

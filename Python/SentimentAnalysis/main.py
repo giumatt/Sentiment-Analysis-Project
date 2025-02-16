@@ -8,17 +8,18 @@ def main():
     sentiment = SentimentAnalysis()
 
     print("Adapting to environmental noises, wait...")
-    audio.adjust_noise()
+    #audio.adjust_noise()
     print("System ready. Listening...")
 
     while True:
         try:
             audio_data = audio.capture_audio()
+            text = None
 
             if audio_data:
                 text = speech.audio_to_text(audio_data)
 
-            if text:
+            if text is not None:
                 print(f"Captured text: {text}")
                 sentiment_result = sentiment.analyze_sentiment(text)
                 print(f"Sentiment: {sentiment_result}")

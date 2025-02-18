@@ -54,7 +54,7 @@ public class SentimentAnalysis implements SentimentAnalysisInterface {
             URL url = new URL(apiURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", apiToken); // Inserisci il tuo token
+            conn.setRequestProperty("Authorization", "Bearer " + apiToken); // Inserisci il tuo token
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
 
@@ -66,11 +66,16 @@ public class SentimentAnalysis implements SentimentAnalysisInterface {
 
             String response = new String(conn.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             JSONArray jsonArray = new JSONArray(response);
-            JSONObject firstResult = jsonArray.getJSONObject(0);
-            JSONArray labels = firstResult.getJSONArray("label");
-            String sentimentLabel = labels.getString(0);
 
-            return sentimentLabel;
+            if(jsonArray.length() > 0) {
+                JSONArray innerArray = jsonArray.getJSONArray(0);
+                if(innerArray.length() > 0) {
+                    JSONObject sentimentObject = innerArray.getJSONObject(0);
+                    return sentimentObject.getString("label");
+                }
+            }
+
+            return "Neutral";
         } catch (Exception e) {
             e.printStackTrace();
             return "Neutral";

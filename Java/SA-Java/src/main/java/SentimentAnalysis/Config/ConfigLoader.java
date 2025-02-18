@@ -17,7 +17,7 @@ public class ConfigLoader {
         try (FileInputStream fis = new FileInputStream(CONFIG_FILE)) {
             properties.load(fis);
         } catch (IOException e) {
-            throw new RuntimeException("Errore nel caricamento del file di configurazione: " + CONFIG_FILE, e);
+            throw new RuntimeException("Error while reading config file: " + CONFIG_FILE, e);
         }
     }
 

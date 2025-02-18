@@ -67,9 +67,9 @@ public class SentimentAnalysis implements SentimentAnalysisInterface {
             String response = new String(conn.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             JSONArray jsonArray = new JSONArray(response);
 
-            if(jsonArray.length() > 0) {
+            if(!jsonArray.isEmpty()) {
                 JSONArray innerArray = jsonArray.getJSONArray(0);
-                if(innerArray.length() > 0) {
+                if(!innerArray.isEmpty()) {
                     JSONObject sentimentObject = innerArray.getJSONObject(0);
                     return sentimentObject.getString("label");
                 }

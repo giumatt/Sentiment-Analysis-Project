@@ -1,5 +1,5 @@
 SpeechRecognition
-textblob
 pyaudio
 transformers
 tensorflow
+langid

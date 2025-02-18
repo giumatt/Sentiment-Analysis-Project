@@ -4,8 +4,14 @@ from src.sentiment_analysis import SentimentAnalysis
 import langid
 import json
 import requests
+import paho.mqtt.client as mqtt
 
-NODE_RED_URL = "http://localhost:1880/sentiment"
+MQTT_BROKER = "localhost"
+MQTT_PORT = 1883
+MQTT_TOPIC = "sentiment_analysis"
+
+client = mqtt.Client()
+client.connect(MQTT_BROKER, MQTT_PORT, 60)
 
 def main():
     audio = AudioCapture()
@@ -55,9 +61,9 @@ def main():
             break
 
 def send_to_nodered(data):
-    headers = {"Content-Type": "application/json"}
-    response = requests.post(NODE_RED_URL, data=json.dumps(data), headers=headers)
-    print(f"Response from Node-RED: {response.status_code} - {response.text}")
-
+    payload = json.dumps(data)
+    client.publish(MQTT_TOPIC, payload)
+    print(f"Sent message to Node-RED '{MQTT_TOPIC}': {payload}")
+    
 if __name__ == "__main__":
     main()

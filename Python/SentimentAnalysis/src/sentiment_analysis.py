@@ -1,6 +1,6 @@
 from transformers import pipeline
 
-class SentimentAnalysis.Services.SentimentAnalysis:
+class SentimentAnalysis:
     def __init__(self):
         self.sentiment_pipeline = pipeline("sentiment-analysis", model="tabularisai/multilingual-sentiment-analysis")
     

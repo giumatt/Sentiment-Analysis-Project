@@ -54,7 +54,7 @@ public class SentimentAnalysis implements SentimentAnalysisInterface {
             URL url = new URL(apiURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", "Bearer " + apiToken); // Inserisci il tuo token
+            conn.setRequestProperty("Authorization", "Bearer " + apiToken);
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
 

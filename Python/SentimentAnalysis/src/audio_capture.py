@@ -9,6 +9,6 @@ class AudioCapture:
         with self.microphone as source:
             self.recognizer.adjust_for_ambient_noise(source)
     
-    def capture_audio(self):                        # Find a way to extend the audio capture window
+    def capture_audio(self):
         with self.microphone as source:
             return self.recognizer.listen(source)

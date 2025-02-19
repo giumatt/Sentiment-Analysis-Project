@@ -42,7 +42,13 @@ The applications:
 
 ## 🚀 Installation
 
-### 1️⃣ Setup Docker Environment
+## 1️⃣ Clone this repository
+
+```sh
+git clone https://github.com/giumatt/Sentiment-Analysis-Project
+```
+
+### 2️⃣ Setup Docker Environment
 
 Ensure **Docker** and **Docker Compose** are installed.
 
@@ -51,14 +57,14 @@ cd Docker
 docker-compose up -d
 ```
 
-### 2️⃣ Run Java Service
+### 3️⃣ Run Java Service
 
 ```sh
 cd Java
 mvn clean install
 ```
 
-### 3️⃣ Run Python Service
+### 4️⃣ Run Python Service
 
 ```sh
 cd Python

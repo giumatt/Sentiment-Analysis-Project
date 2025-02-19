@@ -42,7 +42,7 @@ The applications:
 
 ## 🚀 Installation
 
-## 1️⃣ Clone this repository
+### 1️⃣ Clone this repository
 
 ```sh
 git clone https://github.com/giumatt/Sentiment-Analysis-Project

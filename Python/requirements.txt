@@ -1,6 +1,3 @@
 SpeechRecognition
-pyaudio
 transformers
-tensorflow
-langid
 paho-mqtt

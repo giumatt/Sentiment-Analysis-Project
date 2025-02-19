@@ -1,19 +1,47 @@
 from src.audio_capture import AudioCapture
 from src.speech_to_text import SpeechToText
 from src.sentiment_analysis import SentimentAnalysis
-import langid
+
 import json
-import requests
+import os
 import paho.mqtt.client as mqtt
+import shutil
 
 MQTT_BROKER = "localhost"
 MQTT_PORT = 1883
 MQTT_TOPIC = "sentiment_analysis"
 
 client = mqtt.Client()
-client.connect(MQTT_BROKER, MQTT_PORT, 60)
+#client.connect(MQTT_BROKER, MQTT_PORT, 60)
+
+def send_to_nodered(data):
+    payload = json.dumps(data)
+    client.publish(MQTT_TOPIC, payload)
+    print(f"Sent message to Node-RED '{MQTT_TOPIC}': {payload}")
+
+def select_model(language):
+    models = {
+        "it": "SentimentAnalysis/models/vosk-model-small-it-0.22",
+        "en": "models/"     # Needs a fix
+    }
+
+    if language not in models:
+        print(f"Error: '{language}' not supported.")
+    
+    model_path = models[language]
+
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"Model '{model_path}' not found.")
+
+    if os.path.exists("model"):
+        shutil.rmtree("model")
+    
+    shutil.copytree(model_path, "SentimentAnalysis/model")
 
 def main():
+    language = input("Select language [it/en]: ").strip().lower()
+    select_model(language)
+
     audio = AudioCapture()
     speech = SpeechToText()
     sentiment = SentimentAnalysis()
@@ -33,9 +61,6 @@ def main():
             if text:
                 print(f"Captured text: {text}")
 
-                # Language identification
-                language, _ = langid.classify(text)
-
                 if language == "it":
                     lang = "Italian"
                 else:
@@ -53,17 +78,12 @@ def main():
                     "language": lang
                 }
 
-                send_to_nodered(data)
+                #send_to_nodered(data)
             else:
                 print("Retry!")
         except KeyboardInterrupt:
             print("Exiting program...")
             break
-
-def send_to_nodered(data):
-    payload = json.dumps(data)
-    client.publish(MQTT_TOPIC, payload)
-    print(f"Sent message to Node-RED '{MQTT_TOPIC}': {payload}")
     
 if __name__ == "__main__":
     main()

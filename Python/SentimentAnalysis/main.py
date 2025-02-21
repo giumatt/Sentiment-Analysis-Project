@@ -15,7 +15,7 @@ MQTT_PORT = 1883
 MQTT_TOPIC = "sentiment_analysis"
 
 client = mqtt.Client()
-#client.connect(MQTT_BROKER, MQTT_PORT, 60)
+client.connect(MQTT_BROKER, MQTT_PORT, 60)
 
 def send_to_nodered(data):
     payload = json.dumps(data)
@@ -81,7 +81,7 @@ def main():
                     "language": lang
                 }
 
-                #send_to_nodered(data)
+                send_to_nodered(data)
             else:
                 print("Retry!")
         except KeyboardInterrupt:

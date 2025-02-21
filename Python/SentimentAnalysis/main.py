@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MQTT_BROKER = "localhost"
+MQTT_BROKER = os.getenv("MQTT_BROKER")
 MQTT_PORT = 1883
 MQTT_TOPIC = "sentiment_analysis"
 
@@ -24,8 +24,8 @@ def send_to_nodered(data):
 
 def select_model(language):
     models = {
-        "it": "../SentimentAnalysis/models/vosk-model-small-it-0.22",
-        "en": "../SentimentAnalysis/models/vosk-model-en-us-daanzu-20200905"
+        "it": os.getenv("VOSK_MODEL_IT"),
+        "en": os.getenv("VOSK_MODEL_EN")
     }
 
     if language not in models:

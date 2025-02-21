@@ -6,6 +6,9 @@ import json
 import os
 import paho.mqtt.client as mqtt
 import shutil
+from dotenv import load_dotenv
+
+load_dotenv()
 
 MQTT_BROKER = "localhost"
 MQTT_PORT = 1883
@@ -21,8 +24,8 @@ def send_to_nodered(data):
 
 def select_model(language):
     models = {
-        "it": "SentimentAnalysis/models/vosk-model-small-it-0.22",
-        "en": "models/"     # Needs a fix
+        "it": "../SentimentAnalysis/models/vosk-model-small-it-0.22",
+        "en": "../SentimentAnalysis/models/vosk-model-en-us-daanzu-20200905"
     }
 
     if language not in models:
@@ -36,7 +39,7 @@ def select_model(language):
     if os.path.exists("model"):
         shutil.rmtree("model")
     
-    shutil.copytree(model_path, "SentimentAnalysis/model")
+    shutil.copytree(model_path, "model")
 
 def main():
     language = input("Select language [it/en]: ").strip().lower()
@@ -56,7 +59,9 @@ def main():
             audio_data = audio.capture_audio()
 
             # Speech-to-Text
-            text = speech.audio_to_text(audio_data)
+            text_data = speech.audio_to_text(audio_data)
+            text_dict = json.loads(text_data)
+            text = text_dict["text"]
 
             if text:
                 print(f"Captured text: {text}")
@@ -65,8 +70,6 @@ def main():
                     lang = "Italian"
                 else:
                     lang = "English"
-
-                print(f"Detected language: {lang}")
 
                 # Sentiment Analysis
                 sentiment_result = sentiment.analyze_sentiment(text)

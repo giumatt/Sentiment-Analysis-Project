@@ -25,7 +25,7 @@ void loop() {
   if (bytesAvailable >= FRAME_SIZE * sizeof(int16_t)) { 
     PDM.read(audioBuffer, FRAME_SIZE * sizeof(int16_t)); // Read audio data into the buffer
     
-    Serial.write("START", 4); // Send a 4-byte header indicating the start of an audio frame
+    Serial.write("STRT", 4); // Send a 4-byte header indicating the start of an audio frame
     
     uint16_t numSamples = FRAME_SIZE; // Number of samples in the frame
     Serial.write((uint8_t *)&numSamples, sizeof(numSamples)); // Send the sample count (2 bytes)

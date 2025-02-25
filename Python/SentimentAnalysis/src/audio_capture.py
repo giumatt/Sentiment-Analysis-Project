@@ -7,14 +7,17 @@ class AudioCapture:
         self.frame_size = frame_size
 
     def capture_audio(self):
-        # Attende il marker di inizio frame "STRT"
+        # Wait for the marker
         while True:
             header = self.ser.read(4)
+            
             if header == b'STRT':
                 break
-        # Legge la lunghezza dei campioni (2 byte, little-endian)
+
         len_bytes = self.ser.read(2)
         num_samples = struct.unpack('<H', len_bytes)[0]
-        # Legge i dati audio: ogni campione occupa 2 byte (int16)
+
+        # Reading the audio data
         data = self.ser.read(num_samples * 2)
+        
         return data

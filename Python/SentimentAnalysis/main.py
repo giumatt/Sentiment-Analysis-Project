@@ -65,7 +65,7 @@ def main():
             # Speech-to-Text
             result = speech.audio_to_text(raw_audio_data)
             if result is None:
-                print("Riconoscimento vocale non riuscito. Riprova!")
+                print("Voice recognition failed. Retry!")
                 continue
 
             try:
@@ -73,7 +73,7 @@ def main():
                 result_dict = json.loads(result)
                 text = result_dict.get("text", "")
             except Exception as e:
-                print(f"Errore nel decodificare il risultato: {e}")
+                print(f"Error while decoding: {e}")
                 continue
 
             if text:

@@ -1,5 +1,3 @@
 SpeechRecognition
-textblob
-pyaudio
 transformers
-tensorflow
+paho-mqtt

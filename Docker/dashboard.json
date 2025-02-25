@@ -1,0 +1,313 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 2,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "becg9iuhoeby8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.62,
+        "fullHighlight": false,
+        "groupWidth": 1,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "query": "from(bucket: \"sentimentBucket\")\r\n  |> range(start: -12h)\r\n  |> filter(fn: (r) => r._measurement == \"sentiment_data\" and r._field == \"sentiment\")\r\n  |> map(fn: (r) => ({ r with sentiment: r._value, dummy: 1 }))\r\n  |> group(columns: [\"sentiment\"])\r\n  |> sum(column: \"dummy\")\r\n  |> map(fn: (r) => ({ _time: now(), _value: r.dummy, sentiment: r.sentiment }))\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Sentiment Distribution",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "becg9iuhoeby8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 2,
+          "min": -2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "dark-red",
+                "value": -2
+              },
+              {
+                "color": "dark-red",
+                "value": -1
+              },
+              {
+                "color": "dark-orange",
+                "value": -0.99
+              },
+              {
+                "color": "dark-orange",
+                "value": -0.01
+              },
+              {
+                "color": "dark-yellow",
+                "value": 0.01
+              },
+              {
+                "color": "dark-yellow",
+                "value": 1
+              },
+              {
+                "color": "dark-green",
+                "value": 1.01
+              },
+              {
+                "color": "dark-green",
+                "value": 2
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "/^Score$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "becg9iuhoeby8f"
+          },
+          "query": "from(bucket: \"sentimentBucket\")\n  |> range(start: -12h)\n  |> filter(fn: (r) => r._measurement == \"sentiment_data\")\n  |> filter(fn: (r) => r._field == \"sentiment\")\n  |> map(fn: (r) => ({\n        Score: if r._value == \"Very Positive\" then 2 \n               else if r._value == \"Positive\" then 1 \n               else if r._value == \"Neutral\" then 0 \n               else if r._value == \"Negative\" then -1 \n               else -2,  // Very Negative = -2\n        Time: r._time\n    }))\n  |> mean(column: \"Score\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Sentiment",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "becg9iuhoeby8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto",
+              "wrapText": true
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": true,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Time"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "becg9iuhoeby8f"
+          },
+          "query": "from(bucket: \"sentimentBucket\")\n|> range(start: -24h)\n|> filter(fn: (r) => r._measurement == \"sentiment_data\")\n|> pivot(rowKey:[\"_time\"], columnKey:[\"_field\"], valueColumn: \"_value\")\n|> rename(columns: { \"text\": \"Text\", \"language\": \"Language\", \"sentiment\": \"Sentiment\", \"_time\": \"Time\" })\n|> keep(columns: [\"Text\", \"Language\", \"Sentiment\", \"Time\"])\n|> sort(columns: [\"Time\"], desc: true)\n|> map(fn: (r) => ({ Text: r.Text, Language: r.Language, Sentiment: r.Sentiment, Time: string(v: r.Time) }))",
+          "refId": "A"
+        }
+      ],
+      "title": "Phrases and Sentiment",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Language": 2,
+              "Sentiment": 1,
+              "Text": 0,
+              "Time": 3
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "preload": false,
+  "refresh": "5s",
+  "schemaVersion": 40,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "Europe/Rome",
+  "title": "Sentiment Analysis Project - Angelica",
+  "uid": "cecksjeavw6ioe",
+  "version": 1,
+  "weekStart": "monday"
+}

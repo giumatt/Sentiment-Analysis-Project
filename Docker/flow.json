@@ -7,24 +7,6 @@
         "info": ""
     },
     {
-        "id": "8e7e3d05f2ab62c5",
-        "type": "http in",
-        "z": "f6f2187d.f17ca8",
-        "name": "Receive Sentiment Data",
-        "url": "/sentiment",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 170,
-        "y": 100,
-        "wires": [
-            [
-                "33776796627a21c0",
-                "30f7d6436e043a85"
-            ]
-        ]
-    },
-    {
         "id": "0db5d73d4927a369",
         "type": "function",
         "z": "f6f2187d.f17ca8",
@@ -53,7 +35,7 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 250,
+        "x": 270,
         "y": 220,
         "wires": [
             [
@@ -131,6 +113,67 @@
         "wires": []
     },
     {
+        "id": "abfd30df9bc79840",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "PythonSentiment",
+        "topic": "python_sentiment_analysis",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "7e8f5187d2ac0df7",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 80,
+        "y": 220,
+        "wires": [
+            [
+                "33776796627a21c0",
+                "184825cf3c7837c8"
+            ]
+        ]
+    },
+    {
+        "id": "184825cf3c7837c8",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Data coming from Python app",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 210,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "8313086ddf792106",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "JavaSentiment",
+        "topic": "sentiment_analysis",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "521ff1aef539c28c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "30f7d6436e043a85",
+                "33776796627a21c0"
+            ]
+        ]
+    },
+    {
         "id": "bb39010590bc1e92",
         "type": "influxdb",
         "hostname": "127.0.0.1",
@@ -144,5 +187,67 @@
         "url": "http://influxdb:8086",
         "timeout": 10,
         "rejectUnauthorized": true
+    },
+    {
+        "id": "7e8f5187d2ac0df7",
+        "type": "mqtt-broker",
+        "name": "PythonSentiment",
+        "broker": "http://mqtt5",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "521ff1aef539c28c",
+        "type": "mqtt-broker",
+        "name": "JavaSentiment",
+        "broker": "http://mqtt5",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
     }
 ]

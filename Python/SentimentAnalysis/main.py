@@ -41,6 +41,14 @@ def select_model(language):
     
     shutil.copytree(model_path, "model")
 
+def capture_audio_chunk(audio_capture, num_frames=32):
+    chunk = bytearray()
+    for _ in range(num_frames):
+        frame = audio_capture.capture_audio()
+        if frame:
+            chunk.extend(frame)
+    return bytes(chunk)
+
 def main():
     language = input("Select language [it/en]: ").strip().lower()
     select_model(language)
@@ -49,19 +57,24 @@ def main():
     speech = SpeechToText()
     sentiment = SentimentAnalysis()
 
-    print("Adapting to environmental noises, wait...")
-    audio.adjust_noise()
-    print("System ready. Listening...")
-
     while True:
         try:
             # Audio capture
-            audio_data = audio.capture_audio()
-
+            raw_audio_data = capture_audio_chunk(audio, num_frames=157)
+            
             # Speech-to-Text
-            text_data = speech.audio_to_text(audio_data)
-            text_dict = json.loads(text_data)
-            text = text_dict["text"]
+            result = speech.audio_to_text(raw_audio_data)
+            if result is None:
+                print("Riconoscimento vocale non riuscito. Riprova!")
+                continue
+
+            try:
+                # Il risultato è una stringa JSON; lo converto in dizionario
+                result_dict = json.loads(result)
+                text = result_dict.get("text", "")
+            except Exception as e:
+                print(f"Errore nel decodificare il risultato: {e}")
+                continue
 
             if text:
                 print(f"Captured text: {text}")

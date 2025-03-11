@@ -2,7 +2,7 @@ import serial
 import struct
 
 class AudioCapture:
-    def __init__(self, port="/dev/cu.usbmodem1201", baudrate=115200, frame_size=512):
+    def __init__(self, port="/dev/cu.usbmodem1101", baudrate=115200, frame_size=512):
         self.ser = serial.Serial(port, baudrate, timeout=1)
         self.frame_size = frame_size
 

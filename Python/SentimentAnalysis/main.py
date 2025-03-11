@@ -69,7 +69,6 @@ def main():
                 continue
 
             try:
-                # Il risultato è una stringa JSON; lo converto in dizionario
                 result_dict = json.loads(result)
                 text = result_dict.get("text", "")
             except Exception as e:

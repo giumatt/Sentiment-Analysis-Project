@@ -73,10 +73,10 @@ public class SentimentAnalysis implements SentimentAnalysisInterface {
                 }
             }
 
-            return "Neutral";  // Se non ci sono dati, restituisce "Neutral"
+            return "Neutral";
         } catch (Exception e) {
             e.printStackTrace();
-            return "Neutral";  // Gestione degli errori
+            return "Neutral";
         }
     }
 }

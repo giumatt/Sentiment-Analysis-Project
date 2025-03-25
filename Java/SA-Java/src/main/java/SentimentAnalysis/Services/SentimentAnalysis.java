@@ -53,28 +53,30 @@ public class SentimentAnalysis implements SentimentAnalysisInterface {
         try {
             HttpClient client = HttpClient.newHttpClient();
             String jsonInputString = "{\"inputs\": \"" + text + "\"}";
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(apiURL))
                     .header("Authorization", "Bearer " + apiToken)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonInputString))
                     .build();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            JSONArray jsonArray = new JSONArray(response);
+            JSONArray responseArray = new JSONArray(response.body());
 
-            if (!jsonArray.isEmpty()) {
-                JSONArray innerArray = jsonArray.getJSONArray(0);
-                if (!innerArray.isEmpty()) {
-                    JSONObject sentimentObject = innerArray.getJSONObject(0);
+            if (!responseArray.isEmpty()) {
+                JSONArray sentimentArray = responseArray.getJSONArray(0);
+                if (!sentimentArray.isEmpty()) {
+                    JSONObject sentimentObject = sentimentArray.getJSONObject(0);
                     return sentimentObject.getString("label");
                 }
             }
 
-            return "Neutral";
+            return "Neutral";  // Se non ci sono dati, restituisce "Neutral"
         } catch (Exception e) {
             e.printStackTrace();
-            return "Neutral";
+            return "Neutral";  // Gestione degli errori
         }
     }
 }

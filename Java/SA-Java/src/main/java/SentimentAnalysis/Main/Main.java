@@ -37,6 +37,7 @@ public class Main {
 
         int choice = scanner.nextInt();
         scanner.nextLine();
+        scanner.close();
 
         String language = (choice == 1) ? "Italian" : "English";
         String MODEL_PATH = language.equals("Italian") ? modelPathIT : modelPathEN;

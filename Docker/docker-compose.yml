@@ -24,7 +24,7 @@ services:
       - type: volume
         source: influxdb-storage
         target: /var/lib/influxdb
-      - type: volume 
+      - type: volume
         source: influxdb-config
         target: /etc/influxdb
     environment:
@@ -48,10 +48,29 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=grafanapassword
 
+  # mqtt5 eclipse-mosquitto
+  mqtt5:
+    image: eclipse-mosquitto
+    container_name: mqtt5
+    ports:
+      - "1883:1883" #default mqtt port
+      - "9001:9001" #default mqtt port for websockets
+    volumes:
+      - mosquitto-config:/mosquitto/config:rw
+      - mosquitto-data:/mosquitto/data:rw
+      - mosquitto-log:/mosquitto/log:rw
+    restart: unless-stopped
+
+    networks:
+      - monitoring-net
+
 networks:
   monitoring-net:
 
 volumes:
+  mosquitto-config:
+  mosquitto-data:
+  mosquitto-log:
   node-red-data:
   node-red-config:
   influxdb-storage:

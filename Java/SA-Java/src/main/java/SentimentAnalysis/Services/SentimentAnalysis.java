@@ -4,12 +4,12 @@ import SentimentAnalysis.Config.ConfigLoader;
 import SentimentAnalysis.Interfaces.SentimentAnalysisInterface;
 import edu.stanford.nlp.pipeline.*;
 import java.util.Properties;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
+import java.net.http.HttpRequest;
+import java.net.URI;
 
 public class SentimentAnalysis implements SentimentAnalysisInterface {
     private final StanfordCoreNLP pipeline;
@@ -51,25 +51,21 @@ public class SentimentAnalysis implements SentimentAnalysisInterface {
 
     private String analyzeSentimentIta(String text) {
         try {
-            URL url = new URL(apiURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", "Bearer " + apiToken);
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-
+            HttpClient client = HttpClient.newHttpClient();
             String jsonInputString = "{\"inputs\": \"" + text + "\"}";
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(apiURL))
+                    .header("Authorization", "Bearer " + apiToken)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonInputString))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            String response = new String(conn.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             JSONArray jsonArray = new JSONArray(response);
 
-            if(!jsonArray.isEmpty()) {
+            if (!jsonArray.isEmpty()) {
                 JSONArray innerArray = jsonArray.getJSONArray(0);
-                if(!innerArray.isEmpty()) {
+                if (!innerArray.isEmpty()) {
                     JSONObject sentimentObject = innerArray.getJSONObject(0);
                     return sentimentObject.getString("label");
                 }

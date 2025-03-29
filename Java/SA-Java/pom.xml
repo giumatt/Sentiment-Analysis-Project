@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.alphacephei</groupId>
             <artifactId>vosk</artifactId>
-            <version>0.3.45</version> <!-- Controlla la versione più recente -->
+            <version>0.3.45</version>
         </dependency>
 
         <!-- Stanford CoreNLP -->

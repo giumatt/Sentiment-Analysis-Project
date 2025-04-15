@@ -10,7 +10,7 @@ services:
     volumes:
       - node-red-data:/data
       - node-red-config:/usr/src/node-red
-      #entrypoint: ["/bin/bash", "-c", "npm install --no-fund --no-audit node-red-contrib-influxdb && exec node-red"]
+    entrypoint: ["/bin/bash", "-c", "npm install --no-fund --no-audit node-red-contrib-influxdb && exec node-red"]
 
   influxdb:
     image: influxdb:latest

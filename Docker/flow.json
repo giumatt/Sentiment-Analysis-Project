@@ -1,15 +1,15 @@
 [
     {
-        "id": "f6f2187d.f17ca8",
+        "id": "ed51dc5f919d2b6c",
         "type": "tab",
         "label": "Flow 1",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "0db5d73d4927a369",
+        "id": "945eab85077935a1",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "ed51dc5f919d2b6c",
         "name": "Translating function",
         "func": "if (typeof msg.payload === \"string\") {\n    try {\n        msg.payload = JSON.parse(msg.payload);\n    } catch (e) {\n        node.error(\"Errore nel parsing JSON: \" + e.message);\n        return null;\n    }\n}\n\nif (!msg.payload || !msg.payload.text || !msg.payload.sentiment || !msg.payload.language) {\n    node.warn(\"Dati mancanti nel payload dopo conversione: \" + JSON.stringify(msg.payload));\n    return null;\n}\n\nmsg.payload = [\n    {\n        measurement: \"sentiment_data\",\n        fields: { \n            text: msg.payload.text,\n            sentiment: msg.payload.sentiment,\n            language: msg.payload.language\n        }\n    }\n];\n\nreturn msg;",
         "outputs": 1,
@@ -18,38 +18,38 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 220,
+        "x": 550,
+        "y": 300,
         "wires": [
             [
-                "120ca2f6fbd9553b",
-                "664b3b1181869407"
+                "e3dbcee07e636ca7",
+                "6a5ce124ed98b007"
             ]
         ]
     },
     {
-        "id": "33776796627a21c0",
+        "id": "61897d30825e2ec4",
         "type": "json",
-        "z": "f6f2187d.f17ca8",
+        "z": "ed51dc5f919d2b6c",
         "name": "",
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 270,
-        "y": 220,
+        "x": 370,
+        "y": 300,
         "wires": [
             [
-                "0db5d73d4927a369",
-                "45578b08949c667b"
+                "945eab85077935a1",
+                "4dd3b53654ed98a5"
             ]
         ]
     },
     {
-        "id": "45578b08949c667b",
+        "id": "4dd3b53654ed98a5",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "ed51dc5f919d2b6c",
         "name": "JSON Output",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -57,16 +57,16 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 410,
-        "y": 320,
+        "x": 510,
+        "y": 400,
         "wires": []
     },
     {
-        "id": "120ca2f6fbd9553b",
+        "id": "e3dbcee07e636ca7",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "ed51dc5f919d2b6c",
         "name": "Database input",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -74,16 +74,16 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 580,
-        "y": 280,
+        "x": 680,
+        "y": 360,
         "wires": []
     },
     {
-        "id": "30f7d6436e043a85",
+        "id": "9a4c024355ddb316",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "ed51dc5f919d2b6c",
         "name": "Data coming from Java app",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -91,15 +91,15 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 440,
-        "y": 40,
+        "x": 540,
+        "y": 120,
         "wires": []
     },
     {
-        "id": "664b3b1181869407",
+        "id": "6a5ce124ed98b007",
         "type": "influxdb batch",
-        "z": "f6f2187d.f17ca8",
-        "influxdb": "bb39010590bc1e92",
+        "z": "ed51dc5f919d2b6c",
+        "influxdb": "0809e3e5344ee420",
         "precision": "",
         "retentionPolicy": "",
         "name": "influxDb",
@@ -108,38 +108,38 @@
         "retentionPolicyV18Flux": "",
         "org": "Sentiment-Analysis-Project",
         "bucket": "sentimentBucket",
-        "x": 620,
-        "y": 140,
+        "x": 720,
+        "y": 220,
         "wires": []
     },
     {
-        "id": "abfd30df9bc79840",
+        "id": "dfe115b552ba65d4",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "ed51dc5f919d2b6c",
         "name": "PythonSentiment",
         "topic": "python_sentiment_analysis",
         "qos": "0",
         "datatype": "auto-detect",
-        "broker": "7e8f5187d2ac0df7",
+        "broker": "6f0f4423fa4d637c",
         "nl": false,
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 80,
-        "y": 220,
+        "x": 180,
+        "y": 300,
         "wires": [
             [
-                "33776796627a21c0",
-                "184825cf3c7837c8"
+                "61897d30825e2ec4",
+                "54db164d3d930a0a"
             ]
         ]
     },
     {
-        "id": "184825cf3c7837c8",
+        "id": "54db164d3d930a0a",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "ed51dc5f919d2b6c",
         "name": "Data coming from Python app",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -147,14 +147,14 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 210,
-        "y": 380,
+        "x": 310,
+        "y": 460,
         "wires": []
     },
     {
-        "id": "8313086ddf792106",
+        "id": "e826b7d34f826679",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "ed51dc5f919d2b6c",
         "name": "JavaSentiment",
         "topic": "sentiment_analysis",
         "qos": "0",
@@ -164,17 +164,17 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 100,
-        "y": 120,
+        "x": 200,
+        "y": 200,
         "wires": [
             [
-                "30f7d6436e043a85",
-                "33776796627a21c0"
+                "9a4c024355ddb316",
+                "61897d30825e2ec4"
             ]
         ]
     },
     {
-        "id": "bb39010590bc1e92",
+        "id": "0809e3e5344ee420",
         "type": "influxdb",
         "hostname": "127.0.0.1",
         "port": 8086,
@@ -189,7 +189,7 @@
         "rejectUnauthorized": true
     },
     {
-        "id": "7e8f5187d2ac0df7",
+        "id": "6f0f4423fa4d637c",
         "type": "mqtt-broker",
         "name": "PythonSentiment",
         "broker": "http://mqtt5",
@@ -223,7 +223,7 @@
         "id": "521ff1aef539c28c",
         "type": "mqtt-broker",
         "name": "JavaSentiment",
-        "broker": "http://mqtt5",
+        "broker": "mqtt5",
         "port": 1883,
         "clientid": "",
         "autoConnect": true,

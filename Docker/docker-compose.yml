@@ -68,7 +68,6 @@ networks:
   monitoring-net:
 
 volumes:
-  mosquitto-config:
   mosquitto-data:
   mosquitto-log:
   node-red-data:

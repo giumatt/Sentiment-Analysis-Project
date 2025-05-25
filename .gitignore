@@ -16,3 +16,5 @@ Python/SentimentAnalysis.Services.SentimentAnalysis/src/__pycache__
 Java/.idea/
 .vscode/
 .idea/
+Models/
+java_client*

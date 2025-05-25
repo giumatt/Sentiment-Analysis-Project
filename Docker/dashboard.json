@@ -18,13 +18,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 1,
   "links": [],
   "panels": [
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "becg9iuhoeby8f"
+        "uid": "bemzd6l7vphj4f"
       },
       "fieldConfig": {
         "defaults": {
@@ -57,8 +57,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -98,7 +97,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
-      "pluginVersion": "11.5.1",
+      "pluginVersion": "12.0.1",
       "targets": [
         {
           "query": "from(bucket: \"sentimentBucket\")\r\n  |> range(start: -12h)\r\n  |> filter(fn: (r) => r._measurement == \"sentiment_data\" and r._field == \"sentiment\")\r\n  |> map(fn: (r) => ({ r with sentiment: r._value, dummy: 1 }))\r\n  |> group(columns: [\"sentiment\"])\r\n  |> sum(column: \"dummy\")\r\n  |> map(fn: (r) => ({ _time: now(), _value: r.dummy, sentiment: r.sentiment }))\r\n",
@@ -111,7 +110,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "becg9iuhoeby8f"
+        "uid": "bemzd6l7vphj4f"
       },
       "fieldConfig": {
         "defaults": {
@@ -126,8 +125,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "dark-red",
@@ -186,7 +184,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "11.5.1",
+      "pluginVersion": "12.0.1",
       "targets": [
         {
           "datasource": {
@@ -203,7 +201,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "becg9iuhoeby8f"
+        "uid": "bemzd6l7vphj4f"
       },
       "fieldConfig": {
         "defaults": {
@@ -224,8 +222,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -262,7 +259,7 @@
           }
         ]
       },
-      "pluginVersion": "11.5.1",
+      "pluginVersion": "12.0.1",
       "targets": [
         {
           "datasource": {
@@ -295,7 +292,7 @@
   ],
   "preload": false,
   "refresh": "5s",
-  "schemaVersion": 40,
+  "schemaVersion": 41,
   "tags": [],
   "templating": {
     "list": []
@@ -306,8 +303,8 @@
   },
   "timepicker": {},
   "timezone": "Europe/Rome",
-  "title": "Sentiment Analysis Project - Angelica",
+  "title": "Sentiment Analysis Project",
   "uid": "cecksjeavw6ioe",
-  "version": 1,
+  "version": 2,
   "weekStart": "monday"
 }

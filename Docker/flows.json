@@ -1,0 +1,55 @@
+[
+    {
+        "id": "8313086ddf792106",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "JavaSentiment",
+        "topic": "sentiment_analysis",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "521ff1aef539c28c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 380,
+        "y": 300,
+        "wires": [
+            [
+                "30f7d6436e043a85",
+                "33776796627a21c0"
+            ]
+        ]
+    },
+    {
+        "id": "521ff1aef539c28c",
+        "type": "mqtt-broker",
+        "name": "JavaSentiment",
+        "broker": "mqtt5",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
